@@ -24,8 +24,10 @@ public class Application {
                 case 1 : monsterController.selectAllMonster(); break;
                 case 2 : monsterController.selectMonsterByCode(inputMonsterCode()); break;
                 case 3 : monsterController.SearchMonster(inputSearchMonster()); break;
-                case 4 : subMenu(); break;
+                case 4 : subMonsterMenu(); break;
                 case 9 : return;
+                default:
+                    System.out.println("잘못된 번호를 입력하셨습니다.");
             }
         }while(true);
     }
@@ -64,7 +66,7 @@ public class Application {
         }
         return search;
     }
-    private static void subMenu() {
+    private static void subMonsterMenu() {
         Scanner sc = new Scanner(System.in);
         MonsterController monsterController = new MonsterController();
 
@@ -82,6 +84,8 @@ public class Application {
                 case 2 : monsterController.updateMonster(inputModifyMonster()); break;
                 case 3 : monsterController.deleteMonster(inputMonsterCode()); break;
                 case 9 : return;
+                default:
+                    System.out.println("잘못된 번호를 입력하셨습니다.");
             }
         } while (true);
 
@@ -107,6 +111,7 @@ public class Application {
         parameter.put("name",name);
         parameter.put("type",type);
         parameter.put("feature", feature);
+
 
         return parameter;
     }
