@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="assignment.monstercollection.MonsterMapper">
+
+ <resultMap id="monsterResultMap" type="assignment.monstercollection.MonsterDTO">
+   <id property="code" column="MONSTER_CODE"/>
+     <result property="name" column="MONSTER_NAME"/>
+     <result property="type" column="MONSTER_TYPE"/>
+     <result property="categoryCode" column="CATEGORY_CODE"/>
+     <result property="feature" column="MONSTER_FEATURE"/>
+
+ </resultMap>
+
+    <select id="selectAllMonster" resultMap="monsterResultMap">
+        SELECT
+               MONSTER_CODE
+             , MONSTER_NAME
+             , MONSTER_TYPE
+             , MONSTER_FEATURE
+             , CATEGORY_CODE
+          FROM MC_MONSTER
+          ORDER BY MONSTER_CODE
+    </select>
+
+    <select id="selectMonsterByCode" parameterType="_int" resultMap="monsterResultMap">
+        SELECT
+                MONSTER_CODE
+              , MONSTER_NAME
+              , MONSTER_TYPE
+              , MONSTER_FEATURE
+              , CATEGORY_CODE
+          FROM  MC_MONSTER
+         WHERE  MONSTER_CODE =#{ code }
+
+    </select>
+
+    <select id="searchMonster" parameterType="hashmap" resultMap="monsterResultMap">
+       SELECT
+              MONSTER_CODE
+            , MONSTER_NAME
+            , MONSTER_TYPE
+            , MONSTER_FEATURE
+            , CATEGORY_CODE
+         FROM MC_MONSTER
+        <trim prefix="WHERE" prefixOverrides="AND || OR">
+            <if test="nameValue != null">
+                MONSTER_NAME LIKE '%' || #{ nameValue } || '%'
+            </if>
+            <if test="categoryValue">
+                AND CATEGORY_CODE = #{ categoryValue }
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insertMonster" parameterType="assignment.monstercollection.MonsterDTO">
+        INSERT
+          INTO MC_MONSTER
+               (
+                MONSTER_CODE
+               ,CATEGORY_CODE
+               ,MONSTER_NAME
+               ,MONSTER_TYPE
+               ,MONSTER_FEATURE
+               )
+            VALUES
+              (
+                 SEQ_MONSTER_CODE.NEXTVAL
+               , #{ categoryCode }
+               , #{ name }
+               , #{ type }
+               , #{ feature }
+              )
+    </insert>
+
+    <update id="updateMonster" parameterType="assignment.monstercollection.MonsterDTO">
+        UPDATE
+                MC_MONSTER
+           SET  MONSTER_NAME =#{ name }
+             ,  MONSTER_TYPE =#{ type }
+             ,  CATEGORY_CODE =#{ categoryCode }
+             ,  MONSTER_FEATURE =#{ feature }
+         WHERE  MONSTER_CODE = #{ code }
+    </update>
+
+    <delete id="deleteMonster" parameterType="_int">
+        DELETE
+          FROM MC_MONSTER
+         WHERE MONSTER_CODE = #{ code }
+    </delete>
+</mapper>
+
